@@ -2,6 +2,12 @@
 
 set -e
 
+# Slider icons
+warm_icon="weather-clear"
+cool_icon="weather-clear-night"
+brightness_icon="weather-clear"
+temperature_icon="applications-graphics"
+
 # Paths to the backlight "files"
 warm_path='/sys/class/backlight/backlight_warm/'
 cool_path='/sys/class/backlight/backlight_cool/'
@@ -40,12 +46,12 @@ case "$1" in
 	yad --plug=${plug_key} --tabnum=1 --text="Cool" \
 	    --scale --inc-buttons --step=8 --print-partial \
 	    --min-value 0 --max-value $cool_max --value $cool_orig \
-	    --image=weather-clear-night | sed -ue 's/^/cool /' >&3 &
+	    --image=${cool_icon} | sed -ue 's/^/cool /' >&3 &
 	# Create the warm slider
 	yad --plug=${plug_key} --tabnum=2 --text="Warm" \
 	    --scale --inc-buttons --step=8 --print-partial \
 	    --min-value 0 --max-value $warm_max --value $warm_orig \
-	    --image=weather-clear | sed -ue 's/^/warm /' >&3 &
+	    --image=${warm_icon} | sed -ue 's/^/warm /' >&3 &
 	# Read the sliders' values, and set them as we get them
 	while read which value; do
 	    case ${which} in
@@ -79,12 +85,12 @@ case "$1" in
 	yad --plug=${plug_key} --tabnum=1 --text="Brightness" \
 	    --scale --inc-buttons --step=8 --print-partial \
 	    --min-value 0 --max-value 255 --value $brightness_orig \
-	    --image=weather-clear | sed -ue 's/^/brightness /' >&3 &
+	    --image=${brightness_icon} | sed -ue 's/^/brightness /' >&3 &
 	# Create the ratio slider
 	yad --plug=${plug_key} --tabnum=2 --text="Color temperature" \
 	    --scale --inc-buttons --step=8 --print-partial \
 	    --min-value -100 --max-value 100 --value $ratio_orig \
-	    --image=applications-graphics | sed -ue 's/^/ratio /' >&3 &
+	    --image=${temperature_icon} | sed -ue 's/^/ratio /' >&3 &
 	# Read the sliders' values, and set them as we get them
 	while read which value; do
 	    case ${which} in
