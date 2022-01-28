@@ -21,7 +21,7 @@ Toward the top of the shell script are variables you can use to set the slider i
 
 You can use `yad`'s Icon Browser to find the names of icons you like.
 
-### Acknolwedgements
+### Credits
 
 Thanks to SolraBizna for help with the advanced shell stuff!
 

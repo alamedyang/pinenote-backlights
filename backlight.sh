@@ -106,11 +106,11 @@ case "$1" in
 	    esac
 	    # Set the values according to the new brightness and/or ratio
 	    if [ $ratio -gt 0 ]; then
-		warm=$brightness
-		cool=$((brightness * (100 - ratio) / 100))
+			warm=$brightness
+			cool=$((brightness * (100 - ratio) / 100))
 	    else
-		cool=$brightness
-		warm=$((brightness * (100 - -ratio) / 100))
+			cool=$brightness
+			warm=$((brightness * (100 - -ratio) / 100))
 	    fi
 	    echo $cool | sudo tee ${cool_path}brightness > /dev/null &
 	    echo $warm | sudo tee ${warm_path}brightness > /dev/null &
@@ -129,4 +129,3 @@ yad --paned --orient=vertical --key=${plug_key} \
 	--width 500 --height 120 --fixed --center \
 	--sticky --mouse --on-top --close-on-unfocus \
 	--escape-ok --button OK
-
