@@ -35,7 +35,7 @@ rm -f "${fifo_path}"
 ipcrm -M ${plug_key} 2>/dev/null || true
 
 case "$1" in
-    "--separate" | "")
+    "--separate")
 	# Create the cool slider
 	yad --plug=${plug_key} --tabnum=1 --text="Cool" \
 	    --scale --inc-buttons --step=8 --print-partial \
@@ -61,13 +61,17 @@ case "$1" in
 	    esac
 	done <&3 &
 	;;
-    "--ratio")
+    "--ratio" | "")
 	if [ $warm_orig -gt $cool_orig ]; then
 	    brightness_orig=$warm_orig
 	    ratio_orig=$((100 - cool_orig * 100 / warm_orig))
 	else
 	    brightness_orig=$cool_orig
-	    ratio_orig=-$((100 - warm_orig * 100 / cool_orig))
+	    if [ $cool_orig -gt 0 ]; then
+	        ratio_orig=-$((100 - warm_orig * 100 / cool_orig))
+	    else
+	        ratio_orig=0
+	    fi
 	fi
 	brightness=${brightness_orig}
 	ratio=${ratio_orig}
@@ -75,12 +79,12 @@ case "$1" in
 	yad --plug=${plug_key} --tabnum=1 --text="Brightness" \
 	    --scale --inc-buttons --step=8 --print-partial \
 	    --min-value 0 --max-value 255 --value $brightness_orig \
-	    --image=weather-clear-night | sed -ue 's/^/brightness /' >&3 &
+	    --image=weather-clear | sed -ue 's/^/brightness /' >&3 &
 	# Create the ratio slider
-	yad --plug=${plug_key} --tabnum=2 --text="ratio" \
+	yad --plug=${plug_key} --tabnum=2 --text="Color temperature" \
 	    --scale --inc-buttons --step=8 --print-partial \
 	    --min-value -100 --max-value 100 --value $ratio_orig \
-	    --image=weather-clear | sed -ue 's/^/ratio /' >&3 &
+	    --image=applications-graphics | sed -ue 's/^/ratio /' >&3 &
 	# Read the sliders' values, and set them as we get them
 	while read which value; do
 	    case ${which} in
@@ -108,7 +112,7 @@ case "$1" in
 	;;
     *)
 	echo "Usage: backlight.sh --separate OR --ratio"
-	echo "default is --separate"
+	echo "default is --ratio"
 	exit 1
 	;;
 esac
